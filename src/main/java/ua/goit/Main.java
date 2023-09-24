@@ -18,10 +18,18 @@ public class Main {
                 "Nastya",
                 "Illia",
                 "Dmytro");
-
+//  Task 1
         System.out.println(oddIndexNames(names));
+
+//  Tas 2
         System.out.println(sortedDescCapitalNames(names));
+
+//  Task 3
         arraySort();
+
+//  Task 4
+        System.out.println("streamGenerator(25214903917L, 11L, 2^48L) = " + streamGenerator(25214903917L, 11, 2 ^ 48L).toList());
+        System.out.println("streamGenerator(7L, 7L, 10L) = " + streamGenerator(7L, 7L, 10L).toList());
 
 
     }
@@ -55,7 +63,7 @@ public class Main {
 //  Необхідно отримати з масиву всі числа, і вивести їх у відсортованому вигляді через кому ,, наприклад: "0, 1, 2, 4, 5"
 
     public static void arraySort () {
-        String[] numbersArray = new String[]{"1, 2, 0", "4, 5"};
+/*        String[] numbersArray = new String[]{"1, 2, 0", "4, 5"};
 
         List<String> stringNumbers = new ArrayList<>();
         for (String element: numbersArray) {
@@ -65,6 +73,35 @@ public class Main {
         Stream<String> sortedNumbers = stringNumbers
                 .stream()
                 .sorted();
-        System.out.println("stringNumbers = " + sortedNumbers.collect(Collectors.toList()));
+        System.out.println("stringNumbers = " + sortedNumbers.collect(Collectors.toList()));*/
+
+        //OR
+        String[] input = new String[]{"1, 2, 0", "4, 5"};
+
+        String result = Arrays.stream(input)
+                .flatMap(str -> Arrays.stream(str.split(", ")))
+                .map(Integer::parseInt)
+                .sorted()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+
+        System.out.println("result = " + result);
+
+    }
+
+//  Завдання 4
+//Використовуючи Stream.iterate, створіть безкінечний стрім випадкових чисел, але не використовуючи Math.random().
+//Реалізуйте свій лінійний конгруентний генератор. Для цього почніть з x[0] = seed, і далі кожний наступний елемент
+// рахуйте за формулою на зразок x[n + 1] = 1 (a x[n] + c) % m для коректних значень a, c, та m.
+//Необхідно імплементувати метод, що приймає на вхід параметри a, c, та m, і повертає Stream<Long>.
+
+    public static Stream<Long> streamGenerator (long a, long c, long m) {
+        //
+        if (m >= 2 && (a >= 0 && a < m) && (c >=0 && c < m)) {
+            return Stream.iterate(a, x -> (a * x + c) % m)
+                    .limit(100);
+        }
+        return Stream.of(-1L);
+
     }
 }
