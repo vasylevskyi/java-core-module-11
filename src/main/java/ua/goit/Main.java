@@ -1,10 +1,7 @@
 package ua.goit;
 
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -30,6 +27,9 @@ public class Main {
 //  Task 4
         System.out.println("streamGenerator(25214903917L, 11L, 2^48L) = " + streamGenerator(25214903917L, 11, 2 ^ 48L).toList());
         System.out.println("streamGenerator(7L, 7L, 10L) = " + streamGenerator(7L, 7L, 10L).toList());
+
+//  Task 5
+        zip(Stream.of("Yana", "Alex", "Ivan"), names.stream()).forEach(System.out::println);
 
 
     }
@@ -90,10 +90,10 @@ public class Main {
     }
 
 //  Завдання 4
-//Використовуючи Stream.iterate, створіть безкінечний стрім випадкових чисел, але не використовуючи Math.random().
-//Реалізуйте свій лінійний конгруентний генератор. Для цього почніть з x[0] = seed, і далі кожний наступний елемент
-// рахуйте за формулою на зразок x[n + 1] = 1 (a x[n] + c) % m для коректних значень a, c, та m.
-//Необхідно імплементувати метод, що приймає на вхід параметри a, c, та m, і повертає Stream<Long>.
+//  Використовуючи Stream.iterate, створіть безкінечний стрім випадкових чисел, але не використовуючи Math.random().
+//  Реалізуйте свій лінійний конгруентний генератор. Для цього почніть з x[0] = seed, і далі кожний наступний елемент
+//  рахуйте за формулою на зразок x[n + 1] = 1 (a x[n] + c) % m для коректних значень a, c, та m.
+//  Необхідно імплементувати метод, що приймає на вхід параметри a, c, та m, і повертає Stream<Long>.
 
     public static Stream<Long> streamGenerator (long a, long c, long m) {
         //
@@ -104,4 +104,33 @@ public class Main {
         return Stream.of(-1L);
 
     }
+
+//  Task 5
+//  Напишіть метод public static <T> Stream<T> zip(Stream<T> first, Stream<T> second) який "перемішує" елементи
+//  зі стрімів first та second, зупиняючись тоді, коли у одного зі стрімів закінчаться елементи.
+
+    public static <T> Stream<T> zip(Stream<T> first, Stream<T> second) {
+        Iterator<T> iteratorFirst = first.iterator();
+        Iterator<T> iteratorSecond = second.iterator();
+        Stream<T> resultStream = Stream.of();
+        Stream.Builder<T> builder = Stream.builder();
+
+//        List<T> outList = new ArrayList<>();
+
+        while (iteratorFirst.hasNext() && iteratorSecond.hasNext()) {
+            builder = builder.add(iteratorFirst.next())
+                    .add(iteratorSecond.next());
+
+/*          outList.add(iteratorFirst.next());
+            outList.add(iteratorSecond.next());*/
+
+        }
+        resultStream = builder.build();
+        return resultStream;
+
+/*      return outList.stream();*/
+
+    }
+
+
 }
